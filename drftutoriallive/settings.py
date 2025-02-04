@@ -24,7 +24,7 @@ SECRET_KEY = "django-insecure-k@n3lr)r7=x9d9a%56vvbk&3st+d@*e)d7+x5g%0_#dous(r3z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -38,12 +38,15 @@ INSTALLED_APPS = [
 
     # LOCAL APPS
     "watchlist_app",
+    "user",
 
     # THIRD PART APPS
     "rest_framework",
+    'rest_framework.authtoken',
 ]
 
 # ALLOWED_HOSTS = ["*"]
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -123,3 +126,15 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated'
+#     ]
+# }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+    ]
+}
