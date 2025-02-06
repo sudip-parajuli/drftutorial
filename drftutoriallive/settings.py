@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # THIRD PART APPS
     "rest_framework",
     'rest_framework.authtoken',
+    'django_filters',
 ]
 
 # ALLOWED_HOSTS = ["*"]
@@ -134,7 +135,20 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # }
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-    ]
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.BasicAuthentication',
+    #     'rest_framework.authentication.TokenAuthentication',
+    # ],
+
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '2/day',
+        'user': '3/day',
+        'review': '3/day',
+    }
 }
+
+

@@ -9,10 +9,15 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated,IsAdminUser,IsAuthenticatedOrReadOnly
 from watchlist_app.api.v1.permissions import IsAdminOrReadOnly,IsReviewUserOrReadOnly
+from watchlist_app.api.v1.pagination import  CustomCursorPagination
 
 from watchlist_app.api.v1.serializers.movie import MovieSerializer, StreamSerializer, ReviewSerializer
 # from watchlist_app.models import Movie
 from watchlist_app.models import WatchList,StreamPlatform,Review
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
+from watchlist_app.api.v1.throttles import ReviewRateThrottle
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 
@@ -214,15 +219,48 @@ class StreamDetailAV(APIView):
 """Concrete View Classes"""
 
 class ReviewList(ListCreateAPIView):
-    queryset=Review.objects.all()
+    # queryset=Review.objects.all()
     serializer_class=ReviewSerializer
-    permission_classes = [IsAdminOrReadOnly, ]
+    # permission_classes = [IsAdminOrReadOnly, ]
+    # throttle_classes= [UserRateThrottle]
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
+    filterset_fields = ['rating', 'active']
+    search_fields = ['review_user__username','description']
+    # ordering_fields = ['rating']
+    ordering_fields = '__all__'
+    # pagination_class=ReviewListPagination
+    # pagination_class=CustomLimitOffsetPagination
+    pagination_class= CustomCursorPagination
+
+    """Filtering against the user"""
+    # def get_queryset(self):
+    #     user=self.request.user
+    #     return Review.objects.filter(review_user_username=user)
+
+    """Filtering against the URL"""
+    # def get_queryset(self):
+    #     username = self.kwargs.get('username')
+    #     if username:
+    #         return Review.objects.filter(review_user__username=username)
+    #     return Review.objects.all()
+
+    """Filtering against query parameters"""
+    def get_queryset(self):
+        queryset=Review.objects.all()
+
+        username = self.request.query_params.get('username')
+        if username:
+            queryset = queryset.filter(review_user__username=username)
+        return queryset
 
 
 class ReviewDetail(RetrieveUpdateDestroyAPIView):
     queryset=Review.objects.all()
     serializer_class=ReviewSerializer
-    permission_classes = [IsReviewUserOrReadOnly, ]
+    # permission_classes = [IsReviewUserOrReadOnly, ]
+    # throttle_classes = [AnonRateThrottle]
+    # throttle_classes = [ReviewRateThrottle]
+    # throttle_scope='review'
 
 
 

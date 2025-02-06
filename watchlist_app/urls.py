@@ -24,6 +24,7 @@ urlpatterns = [
     #review
     path("review/", ReviewList.as_view(), name='review-list'),
     path("review/<int:pk>/", ReviewDetail.as_view(), name='review-details'),
+    path("review/<str:username>/", ReviewList.as_view(), name='review-list'),
 
     # path("review/", ReviewViewSet.as_view({'get':'list'}), name='review-list'),
     # path("review/<int:pk>/", ReviewViewSet.as_view({'get':'retrieve'}), name='review-details'),
