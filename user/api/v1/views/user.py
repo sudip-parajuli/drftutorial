@@ -10,6 +10,7 @@ from user.api.v1.serializers.user import  RegisterSerializer, LoginSerializer
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def register(request):
     serializer = RegisterSerializer(data=request.data)
     if serializer.is_valid():
@@ -19,6 +20,7 @@ def register(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def login(request):
     serializer = LoginSerializer(data=request.data)
     if serializer.is_valid():
@@ -38,5 +40,5 @@ def login(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout(request):
-    request.user.auth_token.delete()
+    Token.objects.filter(user=request.user).delete()
     return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
