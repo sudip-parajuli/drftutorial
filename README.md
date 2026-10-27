@@ -9,6 +9,18 @@ styles and learn serializers, relationships, authentication and access control.
 The examples intentionally expose several ways to work with the same records;
 they do not maintain duplicate watchlist or streaming-platform models.
 
+[![Django checks and tests](https://github.com/sudip-parajuli/drftutorial/actions/workflows/tests.yml/badge.svg)](https://github.com/sudip-parajuli/drftutorial/actions/workflows/tests.yml)
+
+## Suggested reading order
+
+Start with the [shared models](watchlist_app/models.py), compare the
+[foundational serializers](watchlist_app/api/v1/serializers/foundations.py) with
+the [relational serializers](watchlist_app/api/v1/serializers/movie.py), then
+compare [example view styles](watchlist_app/api/v1/views/examples.py) against the
+[main API](watchlist_app/api/v1/views/movie.py). The
+[regression suite](watchlist_app/test_consolidation.py) exercises their shared data
+and access boundaries.
+
 ## Topics covered
 
 - Plain Django JSON responses, DRF function views and `APIView`.
